@@ -29,6 +29,8 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
                 pageSize: 20
             });
 
+                console.log(response);
+
             if (response.status === 'ok' && response.articles) {
                 const articles: News[] = response.articles.map((article) => ({
                     title: article.title ?? '',
@@ -42,6 +44,7 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
                 setNews(articles);
                 setNewsErrorMessage(null);
             } else {
+                console.log(response.message);
                 throw new Error(response.message || 'Failed to fetch news data');
             }
         } catch (error) {

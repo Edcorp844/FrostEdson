@@ -4,13 +4,37 @@ import { NewsProvider } from '@/context/news-context'
 import NewsHeader from './news-headser'
 
 
+export function ClientWrapper({ children }: { children: React.ReactNode }) {
+  return <NewsProvider>{children}</NewsProvider>
+}
+
+
+
+export default function NewsLayout({
+    children,
+}: Readonly<{
+    children: React.ReactNode
+}>){
+  return (
+    <html lang="en">
+      <body>
+        <ClientWrapper>
+          <NewsHeader />
+          {children}
+        </ClientWrapper>
+      </body>
+    </html>
+  )
+}
+
+/*
 export default function NewsLayout({
     children,
 }: Readonly<{
     children: React.ReactNode
 }>) {
     return (
-        <html lang="en"> {/* Language will now be controlled by context */}
+        <html lang="en"> 
             <body>
                 <NewsProvider>
                     <NewsHeader />
@@ -21,4 +45,4 @@ export default function NewsLayout({
             </body>
         </html>
     )
-}
+}*/
