@@ -4,7 +4,7 @@ import { NewsProvider } from '@/context/news-context'
 import NewsHeader from './news-headser'
 
 
-export function ClientWrapper({ children }: { children: React.ReactNode }) {
+function ClientWrapper({ children }: { children: React.ReactNode }) {
   return <NewsProvider>{children}</NewsProvider>
 }
 
