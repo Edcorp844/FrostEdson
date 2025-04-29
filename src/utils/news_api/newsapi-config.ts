@@ -5,5 +5,5 @@ const NEWS_API_KEY = '8468d3e24f614f959062cd9645b04e9d';
 
 export const newsAPI = initNewsAPI(NEWS_API_KEY, {
   // Optional: Add CORS proxy URL if needed
-  //corsProxyUrl: 'https://cors-anywhere.herokuapp.com/'
+  corsProxyUrl: 'https://corsproxy.io/?'
 });
