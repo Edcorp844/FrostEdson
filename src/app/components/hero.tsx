@@ -66,7 +66,7 @@ export default function Hero() {
             <div className="relative w-full aspect-[3/2] overflow-hidden">
               <div className="flex items-center py-4 justify-center"><div className='flex items-center bg-systemBlue text-white py-2 px-4 rounded-[100px] hover:underline' onClick={() => setIsActive(!isActive)}>Learn more {/*<ChevronRight />*/}</div></div>
               <img
-                src="/images/iphone-dev1.png"
+                src="https://user-images.githubusercontent.com/43663476/157371504-32ebbca7-81bf-43c0-a762-cdbc0ad50181.png"
                 className="absolute w-full h-[200%] object-cover object-top"
                 alt="iPhone"
               />
