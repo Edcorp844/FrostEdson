@@ -1,6 +1,7 @@
 /**
  * NewsAPI TypeScript Utility for Next.js
  * Provides typed access to the NewsAPI (https://newsapi.org)
+ * Adapted for GitHub Pages with CORS proxy support
  * Author: Frost Edson
  */
 
@@ -48,12 +49,9 @@ interface NewsAPISource {
   country: string;
 }
 
-interface NewsAPIError extends Error {
-  code?: string;
-  message: string;
-}
-
 class NewsAPIError extends Error {
+  code?: string;
+
   constructor(error: { code: string; message: string }) {
     super(error.message);
     this.name = `NewsAPIError: ${error.code}`;
@@ -64,6 +62,7 @@ class NewsAPIError extends Error {
 export class NewsAPI {
   private readonly apiKey: string;
   private readonly corsProxyUrl: string;
+  private readonly host: string = 'https://newsapi.org';
 
   constructor(apiKey: string, options: NewsAPIOptions = {}) {
     if (!apiKey) throw new Error('No API key specified');
@@ -76,13 +75,16 @@ export class NewsAPI {
     params: Record<string, any> = {},
     options: NewsAPIRequestOptions = {}
   ): Promise<T> {
-    const query = new URLSearchParams(params).toString();
-    const baseUrl = `${this.corsProxyUrl}https://newsapi.org${endpoint}`;
+    const query = new URLSearchParams({
+      ...params,
+      apiKey: this.apiKey, // Append API key to query params for api.allorigins.win
+    }).toString();
+    const baseUrl = `${this.corsProxyUrl}${this.host}${endpoint}`;
     const url = query ? `${baseUrl}?${query}` : baseUrl;
 
     const headers: Record<string, string> = {
       'X-Api-Key': this.apiKey,
-      'Accept': 'application/json',
+      Accept: 'application/json',
     };
 
     if (options.noCache) {
@@ -91,25 +93,22 @@ export class NewsAPI {
 
     const reqOptions: RequestInit = {
       method: 'GET',
-      mode: 'cors', // Enable CORS mode
-      headers: headers,
-      cache: options.noCache ? 'no-store' : 'default'
+      mode: 'cors',
+      headers,
+      cache: options.noCache ? 'no-store' : 'default',
     };
 
     try {
       const response = await fetch(url, reqOptions);
 
-      // First check if the response is OK (status 200-299)
       if (!response.ok) {
-        // Try to parse error response as JSON
         try {
           const errorData = await response.json();
           throw new NewsAPIError({
             code: errorData.code || 'fetch_error',
             message: errorData.message || `HTTP ${response.status}: ${response.statusText}`,
           });
-        } catch (e) {
-          // If JSON parsing fails, throw with status text
+        } catch {
           throw new NewsAPIError({
             code: 'network_error',
             message: `HTTP ${response.status}: ${response.statusText}`,
@@ -117,7 +116,6 @@ export class NewsAPI {
         }
       }
 
-      // Check content type before parsing
       const contentType = response.headers.get('content-type');
       if (!contentType?.includes('application/json')) {
         const text = await response.text();
@@ -140,7 +138,7 @@ export class NewsAPI {
         return {
           headers: Object.fromEntries(response.headers.entries()),
           body: data,
-        } as T;
+        } as unknown as T;
       }
 
       return data as T;
@@ -155,7 +153,6 @@ export class NewsAPI {
     }
   }
 
-  // V2 API Methods
   readonly v2 = {
     topHeadlines: async (
       params: {
@@ -169,11 +166,7 @@ export class NewsAPI {
       } = { language: 'en' },
       options: NewsAPIRequestOptions = {}
     ): Promise<NewsAPIResponse<NewsAPIArticle>> => {
-      return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>(
-        '/v2/top-headlines',
-        params,
-        options
-      );
+      return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>('/v2/top-headlines', params, options);
     },
 
     everything: async (
@@ -188,14 +181,10 @@ export class NewsAPI {
         sortBy?: 'relevancy' | 'popularity' | 'publishedAt';
         pageSize?: number;
         page?: number;
-      },
+      } = {},
       options: NewsAPIRequestOptions = {}
     ): Promise<NewsAPIResponse<NewsAPIArticle>> => {
-      return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>(
-        '/v2/everything',
-        params,
-        options
-      );
+      return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>('/v2/everything', params, options);
     },
 
     sources: async (
@@ -203,18 +192,13 @@ export class NewsAPI {
         category?: string;
         language?: string;
         country?: string;
-      },
+      } = {},
       options: NewsAPIRequestOptions = {}
     ): Promise<NewsAPIResponse<NewsAPISource>> => {
-      return this.fetchFromAPI<NewsAPIResponse<NewsAPISource>>(
-        '/v2/sources',
-        params,
-        options
-      );
+      return this.fetchFromAPI<NewsAPIResponse<NewsAPISource>>('/v2/sources', params, options);
     },
   };
 
-  // V1 API Methods (legacy)
   async sources(
     params: {
       category?: string;
@@ -223,11 +207,7 @@ export class NewsAPI {
     } = {},
     options: NewsAPIRequestOptions = {}
   ): Promise<NewsAPIResponse<NewsAPISource>> {
-    return this.fetchFromAPI<NewsAPIResponse<NewsAPISource>>(
-      '/v1/sources',
-      params,
-      options
-    );
+    return this.fetchFromAPI<NewsAPIResponse<NewsAPISource>>('/v1/sources', params, options);
   }
 
   async articles(
@@ -237,15 +217,10 @@ export class NewsAPI {
     },
     options: NewsAPIRequestOptions = {}
   ): Promise<NewsAPIResponse<NewsAPIArticle>> {
-    return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>(
-      '/v1/articles',
-      params,
-      options
-    );
+    return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>('/v1/articles', params, options);
   }
 }
 
-// Utility function to create a singleton instance
 let newsAPIInstance: NewsAPI | null = null;
 
 export const initNewsAPI = (apiKey: string, options: NewsAPIOptions = {}): NewsAPI => {

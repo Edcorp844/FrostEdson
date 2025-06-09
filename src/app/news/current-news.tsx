@@ -1,12 +1,18 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from "react";
-import FlameActivityIndicator from "../components/flame-activity-indicator";
-import { newsAPI } from "@/utils/news_api/newsapi-config";
-import NewsTile from "./news-tile";
-import NewsErrorPage from "./news-error-page";
-import { News } from "@/models/news_model";
-;
+/**
+ * CurrentNews Component
+ * Fetches and displays news articles based on category and language
+ * Uses NewsAPI utility with CORS proxy support for client-side rendering
+ */
+
+import { useEffect, useState } from 'react';
+import FlameActivityIndicator from '../components/flame-activity-indicator';
+import NewsTile from './news-tile';
+import NewsErrorPage from './news-error-page';
+import { News } from '@/models/news_model';
+import { newsAPI } from '@/utils/news_api/newsapi-config';
+
 
 interface NewsPageProps {
     category: Category;
@@ -14,10 +20,10 @@ interface NewsPageProps {
 }
 
 const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
-
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [newsErrorMessage, setNewsErrorMessage] = useState<string | null>(null);
     const [news, setNews] = useState<News[]>([]);
+
 
     const fetchData = async () => {
         setIsLoading(true);
@@ -25,11 +31,11 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
             const response = await newsAPI.v2.topHeadlines({
                 country: 'us',
                 category: category.category.toLowerCase(),
-                language: language,  // Use the dynamic category here
-                pageSize: 20
+                language: language,
+                pageSize: 20,
             });
 
-                console.log(response);
+            console.log(response);
 
             if (response.status === 'ok' && response.articles) {
                 const articles: News[] = response.articles.map((article) => ({
@@ -48,10 +54,14 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
                 throw new Error(response.message || 'Failed to fetch news data');
             }
         } catch (error) {
-            console.error("Exception: ", error);
-            setNewsErrorMessage(
-                error instanceof Error ? error.message : 'An unknown error occurred'
-            );
+            console.error('Exception: ', error);
+            const message =
+                error instanceof Error && error.message.includes('403')
+                    ? 'Failed to access NewsAPI due to CORS proxy restrictions. Please check if the CORS proxy (api.allorigins.win) is operational or contact the administrator.'
+                    : error instanceof Error
+                        ? error.message
+                        : 'An unknown error occurred';
+            setNewsErrorMessage(message);
         } finally {
             setIsLoading(false);
         }
@@ -71,7 +81,7 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
 
     useEffect(() => {
         fetchData();
-    }, [category]);  // Re-fetch when the category changes
+    }, [category]);
 
     if (isLoading) {
         return (
@@ -82,10 +92,13 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
     }
 
     if (newsErrorMessage) {
-        return <NewsErrorPage
-            handleRetry={handleRetry}
-            handleCopyError={handleCopyError}
-            newsErrorMessage={newsErrorMessage} />;
+        return (
+            <NewsErrorPage
+                handleRetry={handleRetry}
+                handleCopyError={handleCopyError}
+                newsErrorMessage={newsErrorMessage}
+            />
+        );
     }
 
     if (news.length === 0) {
@@ -97,10 +110,9 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
     }
 
     return (
-        <section id='news'>
+        <section id="news">
             <div>
                 <div className="mt-20 px-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Featured Article (Left-side) */}
                     <div className="flex justify-center">
                         <div className="shadow-lg rounded-3xl p-2 bg-black/5 outline outline-white/15 backdrop-blur-md dark:bg-white/10 w-full">
                             <div className="relative w-full h-full">
@@ -109,7 +121,8 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
                                     className="w-full h-full rounded-3xl object-cover aspect-video"
                                     alt={news[0].title}
                                     onError={(e) => {
-                                        (e.target as HTMLImageElement).src = 'https://dribbble.com/shots/6525705-Newspaper/attachments/6525705-Newspaper';
+                                        (e.target as HTMLImageElement).src =
+                                            'https://dribbble.com/shots/6525705-Newspaper/attachments/6525705-Newspaper';
                                     }}
                                 />
                                 <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-black/90 via-black/70 to-transparent rounded-b-3xl">
@@ -127,8 +140,6 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
                             </div>
                         </div>
                     </div>
-
-                    {/* News List (Right-side) */}
                     <div>
                         <h2 className="font-bold text-3xl">{category.label} News</h2>
                         <div className="mt-4 h-[70vh] overflow-y-auto pr-4">
@@ -143,6 +154,6 @@ const CurrentNews: React.FC<NewsPageProps> = ({ category, language }) => {
             </div>
         </section>
     );
-}
+};
 
 export default CurrentNews;
