@@ -1,12 +1,11 @@
 /**
  * NewsAPI TypeScript Utility for Next.js
- * Provides typed access to the NewsAPI (https://newsapi.org)
- * Adapted for GitHub Pages with CORS proxy support
+ * Reimagined to sing through a Cloudflare Worker proxy
  * Author: Frost Edson
  */
 
 interface NewsAPIOptions {
-  corsProxyUrl?: string;
+  corsProxyUrl?: string;  // Cloudflare Worker URL here
   noCache?: boolean;
   showHeaders?: boolean;
 }
@@ -61,13 +60,12 @@ class NewsAPIError extends Error {
 
 export class NewsAPI {
   private readonly apiKey: string;
-  private readonly corsProxyUrl: string;
-  private readonly host: string = 'https://newsapi.org';
+  private readonly proxyBase: string;
 
   constructor(apiKey: string, options: NewsAPIOptions = {}) {
     if (!apiKey) throw new Error('No API key specified');
     this.apiKey = apiKey;
-    this.corsProxyUrl = options.corsProxyUrl || '';
+    this.proxyBase = options.corsProxyUrl || 'https://super-wildflower-a341.edsonchan6.workers.dev/?url=';
   }
 
   private async fetchFromAPI<T>(
@@ -75,21 +73,13 @@ export class NewsAPI {
     params: Record<string, any> = {},
     options: NewsAPIRequestOptions = {}
   ): Promise<T> {
-    const query = new URLSearchParams({
-      ...params,
-      apiKey: this.apiKey, // Append API key to query params for api.allorigins.win
-    }).toString();
-    const baseUrl = `${this.corsProxyUrl}${this.host}${endpoint}`;
-    const url = query ? `${baseUrl}?${query}` : baseUrl;
+    const query = new URLSearchParams({ ...params, apiKey: this.apiKey }).toString();
+    const targetUrl = `https://newsapi.org${endpoint}?${query}`;
+    const url = `${this.proxyBase}${encodeURIComponent(targetUrl)}`;
 
     const headers: Record<string, string> = {
-      'X-Api-Key': this.apiKey,
       Accept: 'application/json',
     };
-
-    if (options.noCache) {
-      headers['Cache-Control'] = 'no-cache';
-    }
 
     const reqOptions: RequestInit = {
       method: 'GET',
@@ -143,9 +133,7 @@ export class NewsAPI {
 
       return data as T;
     } catch (error) {
-      if (error instanceof NewsAPIError) {
-        throw error;
-      }
+      if (error instanceof NewsAPIError) throw error;
       throw new NewsAPIError({
         code: 'network_error',
         message: error instanceof Error ? error.message : 'Unknown network error',
@@ -198,29 +186,9 @@ export class NewsAPI {
       return this.fetchFromAPI<NewsAPIResponse<NewsAPISource>>('/v2/sources', params, options);
     },
   };
-
-  async sources(
-    params: {
-      category?: string;
-      language?: string;
-      country?: string;
-    } = {},
-    options: NewsAPIRequestOptions = {}
-  ): Promise<NewsAPIResponse<NewsAPISource>> {
-    return this.fetchFromAPI<NewsAPIResponse<NewsAPISource>>('/v1/sources', params, options);
-  }
-
-  async articles(
-    params: {
-      source: string;
-      sortBy?: 'top' | 'latest' | 'popular';
-    },
-    options: NewsAPIRequestOptions = {}
-  ): Promise<NewsAPIResponse<NewsAPIArticle>> {
-    return this.fetchFromAPI<NewsAPIResponse<NewsAPIArticle>>('/v1/articles', params, options);
-  }
 }
 
+// Singleton management
 let newsAPIInstance: NewsAPI | null = null;
 
 export const initNewsAPI = (apiKey: string, options: NewsAPIOptions = {}): NewsAPI => {
