@@ -7,13 +7,13 @@ import React from "react";
 interface NewsTileProps {
   article: News;
   index: number;
+  onReadMore: (article: News) => void;
 }
 
-const NewsTile: React.FC<NewsTileProps> = ({ article, index }) => {
+const NewsTile: React.FC<NewsTileProps> = ({ article, index, onReadMore }) => {
   return (
     <a
       key={`${article.title}${index}`}
-      href={article.url}
       target="_blank"
       rel="noopener noreferrer"
       className="news-article flex flex-col sm:flex-row gap-4 p-3 sm:px-4 sm:py-3 items-start min-h-[120px] hover:bg-backgroundLayer1 rounded-lg transition-colors"
@@ -49,7 +49,7 @@ const NewsTile: React.FC<NewsTileProps> = ({ article, index }) => {
           {article.description}
         </p>
 
-        <div className="flex items-center text-[#ff375f] mt-2 text-sm sm:text-[14px] font-medium">
+        <div className="flex items-center text-[#ff375f] mt-2 text-sm sm:text-[14px] font-medium" onClick={() => onReadMore(article)}>
           Read More <ChevronRight className="w-4 h-4 ml-1" />
         </div>
       </div>
