@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNews } from '@/context/news-context';
 
-const languages = [
+export const languages = [
     { label: 'English', code: 'en' },
     { label: 'Arabic', code: 'ar' },
     { label: 'Spanish', code: 'es' },
