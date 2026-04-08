@@ -1,0 +1,17 @@
+{
+  "name": "radius_raid",
+  "collaborators": [
+    "Frost Edson <edsonchan6"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "radius_raid_bg.wasm",
+    "radius_raid.js",
+    "radius_raid.d.ts"
+  ],
+  "module": "radius_raid.js",
+  "types": "radius_raid.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
