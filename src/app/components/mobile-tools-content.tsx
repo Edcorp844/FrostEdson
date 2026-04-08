@@ -201,7 +201,7 @@ export default function MobileToolsPage({ showPage = false, onBackFunction = (()
         animate={showPage ? "enter" : "exit"}
         className="fixed top-0 right-0 w-full h-screen  bg-background z-40 pt-16 px-4"
     >
-        <div className='flex'>
+        <div className='pt-16 flex'>
             <div className='text-systemBlue flex items-center' onClick={onBackFunction}><ChevronLeft /> Back</div>
         </div>
         <motion.div

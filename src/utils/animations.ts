@@ -1,10 +1,30 @@
-import { Variants } from 'framer-motion'
+"use client";
 
-export const fadeIn = (direction: 'up' | 'down' | 'left' | 'right', type: string, delay: number, duration: number): Variants => {
+import { Variants } from "framer-motion";
+
+// directional fade-in, softened and typed
+export const fadeIn = (
+  direction: "up" | "down" | "left" | "right",
+  type: "tween" | "spring" | "keyframes",
+  delay = 0,
+  duration = 0.5
+): Variants => {
+  const distance = 50;
+
   return {
     hidden: {
-      x: direction === 'left' ? 50 : direction === 'right' ? -50 : 0,
-      y: direction === 'up' ? 50 : direction === 'down' ? -50 : 0,
+      x:
+        direction === "left"
+          ? distance
+          : direction === "right"
+          ? -distance
+          : 0,
+      y:
+        direction === "up"
+          ? distance
+          : direction === "down"
+          ? -distance
+          : 0,
       opacity: 0,
     },
     show: {
@@ -12,15 +32,16 @@ export const fadeIn = (direction: 'up' | 'down' | 'left' | 'right', type: string
       y: 0,
       opacity: 1,
       transition: {
-        type: type,
-        delay: delay,
-        duration: duration,
-        ease: 'easeOut',
+        type,
+        delay,
+        duration,
+        ease: "easeOut",
       },
     },
-  }
-}
+  };
+};
 
+// stagger container for soft blossoming entrances
 export const staggerContainer: Variants = {
   hidden: {},
   show: {
@@ -29,32 +50,56 @@ export const staggerContainer: Variants = {
       delayChildren: 0.3,
     },
   },
-}
+};
 
-export const menuSlide = {
-  initial: { x: '100%' },
-  enter: { x: '0', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } },
-  exit: { x: '100%', transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } },
-}
+// classic menu slide with cubic ease
+export const menuSlide: Variants = {
+  initial: { x: "100%" },
+  enter: {
+    x: "0%",
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
+  },
+  exit: {
+    x: "100%",
+    transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] },
+  },
+};
 
-export const slide = {
+// list sliding with index awareness
+export const slide : Variants = {
   initial: { x: 80 },
-  enter: (i: number) => ({ x: 0, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.05 * i } }),
-  exit: (i: number) => ({ x: 80, transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.05 * i } }),
-}
+  enter: (i: number) => ({
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.76, 0, 0.24, 1],
+      delay: 0.05 * i,
+    },
+  }),
+  exit: (i: number) => ({
+    x: 80,
+    transition: {
+      duration: 0.8,
+      ease: [0.76, 0, 0.24, 1],
+      delay: 0.05 * i,
+    },
+  }),
+};
 
-export const container = {
+// container blooming softly
+export const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
       staggerChildren: 0.2,
-      delayChildren: 0.3
-    }
-  }
+      delayChildren: 0.3,
+    },
+  },
 };
 
-export const item = {
+// graceful single item reveal
+export const item: Variants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 }
+  show: { opacity: 1, y: 0 },
 };

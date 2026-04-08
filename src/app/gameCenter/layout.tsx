@@ -1,7 +1,6 @@
 'use client'
 
 import { NewsProvider } from '@/context/news-context'
-import NewsHeader from './news-headser'
 
 
 function ClientWrapper({ children }: { children: React.ReactNode }) {
@@ -18,7 +17,6 @@ export default function NewsLayout({
   return (
     
         <ClientWrapper>
-          <NewsHeader />
           {children}
         </ClientWrapper>
     

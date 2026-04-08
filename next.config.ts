@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
   basePath: process.env.NODE_ENV === 'production' ? '/FrostEdson' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/FrostEdson/' : '',
   trailingSlash: true, // Important for GitHub Pages
+
+  // for wasm...games center
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, asyncWebAssembly: true };
+    return config;
+  }
+
 };
 
 export default nextConfig;

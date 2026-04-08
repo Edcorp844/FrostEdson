@@ -9,13 +9,25 @@
     pkgs.yarn
     pkgs.nodePackages.pnpm
     pkgs.bun
+    pkgs.cargo-all-features
+    pkgs.rustc-wasm32
+    pkgs.rustup
+    pkgs.rustfmt
+    pkgs.stdenv.cc
+    pkgs.wasm-pack
   ];
   # Sets environment variables in the workspace
-  env = {};
+  env = {
+     RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+  };
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
       # "vscodevim.vim"
+       "rust-lang.rust-analyzer"
+      "tamasfe.even-better-toml"
+      "serayuzgur.crates"
+      "vadimcn.vscode-lldb"
     ];
     workspace = {
       # Runs when a workspace is first created with this `dev.nix` file

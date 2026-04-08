@@ -14,8 +14,7 @@ export default function Header() {
         <header className="sticky top-0 z-50 bg-backdrop backdrop-blur-md border-b border-separator">
             <div className="container mx-auto px-6 flex justify-between items-center h-16">
                 <Link href="/" className="text-2xl font-bold gap-2" style={{ fontFamily: 'cursive' }}>
-                    <span>Frost</span>
-                    <span className='hidden md:inline'> Edson</span>
+                    <span>Portifolio</span>
                 </Link>
 
                 <nav className="hidden md:flex gap-8">
@@ -45,7 +44,7 @@ export default function Header() {
                     variants={menuSlide}
                     initial="initial"
                     animate={isActive ? "enter" : "exit"}
-                    className="fixed top-0 border-l border-separator right-0 w-full h-screen backdrop-blur-lg bg-background z-40 pt-24 px-8"
+                    className="fixed top-0 right-0 w-full h-screen border-l border-separator backdrop-blur-lg bg-background z-60 pt-24 px-8 block md:hidden"
                 >
                     <div className="flex flex-col gap-8">
                         {navLinks.map((link, index) => (

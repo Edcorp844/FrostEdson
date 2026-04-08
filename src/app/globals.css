@@ -196,6 +196,24 @@
     background-clip: text;
     color: transparent;
   }
+
+ 
+    .image-blur {
+      backdrop-filter: blur(100px);        /* stronger blur */
+      -webkit-backdrop-filter: blur(100px);
+  
+      mask-image: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 1) 0%,      /* bottom fully blurred */
+        rgba(0, 0, 0, 0.7) 20%,
+        rgba(0, 0, 0, 0.4) 45%,
+        rgba(0, 0, 0, 0.2) 55%,
+        rgba(0, 0, 0, 0) 70%      /* top = no blur */
+      );
+  
+      mask-size: 100% 100%;
+      mask-repeat: no-repeat;
+    }
 }
 
 body {
