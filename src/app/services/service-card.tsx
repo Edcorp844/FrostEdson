@@ -2,15 +2,15 @@
 interface ServiceCardProps {
   title: string,
   description: string,
-  image: string,
+  video: string,
   logo: string,
   serviceName: string,
 }
 
 
-const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, image, logo, serviceName}) =>{
+const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, video, logo, serviceName}) =>{
   return (
-    <div className="w-100 h-96 border border-separator rounded-2xl shadow-2xl bg-backgroundLayer1 overflow-hidden relative group">
+    <div className="w-full h-96 aspect-[3/3] md:aspect-auto md:h-[450px] md:w-[350px] lg:h-96 lg:w-[450px] border border-separator rounded-2xl shadow-2xl bg-backgroundLayer1 overflow-hidden relative group">
       <video
         autoPlay
         loop
@@ -18,7 +18,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ title, description, image, lo
         playsInline
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       >
-        <source src={image} type="video/mp4" />
+        <source src={video} type="video/mp4" />
       </video>
 
       {/* Blur Mask */}
