@@ -9,18 +9,39 @@ export default function ServicesPage() {
                     <h1 className="text-6xl font-bold text-center text-apple-intelligence-gradient">Services</h1>
                     <div className="max-w-4xl text-center mx-auto mt-4 text-xl">This is a place where you get a test of most services free online. I have crafted this to become an expertience for you. But honestly, it depends on what you want. Granny might never even know this palce exists on the internet.</div>
                 </div>
-                <div className="mt-6 flex items-center justify-center gap-6 overflow-x-auto pb-4 scrollbar-hide">
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 justify-items-center items-center pb-4">
                     {/* Use min-w-max or flex-shrink-0 so the cards don't squish */}
+                   
                     <a href="/gameCenter" className="flex-shrink-0">
-                        <ServiceCard />
+                        <ServiceCard 
+                            title="Game Center" 
+                            image="https://www.pexels.com/download/video/8128414/"
+                            description="A platform to play free online games. A free service impelemented for gamers."
+                            serviceName="Frost Games" 
+                            logo="/svgs/game-center-logo.svg"
+                        />
                     </a>
-                    <a href="/gameCenter" className="flex-shrink-0">
-                        <ServiceCard />
+
+                    <a href="/AppCenter" className="flex-shrink-0">
+                        <ServiceCard 
+                            title="App Center" 
+                            image="https://www.pexels.com/download/video/6611945/"
+                            description="A platform to play free online games. A free service impelemented for gamers."
+                            serviceName="Frost Apps" 
+                            logo="/svgs/game-center-logo.svg"
+                        />
                     </a>
-                    {/* Add more cards to see the scroll effect */}
-                    <a href="/gameCenter" className="flex-shrink-0">
-                        <ServiceCard />
+
+                    <a href="/playstation" className="flex-shrink-0">
+                        <ServiceCard 
+                            title="Ps Jailbreak" 
+                            image="https://www.pexels.com/download/video/8128417/"
+                            description="A platform to play free online games. A free service impelemented for gamers."
+                            serviceName="Frost Services" 
+                            logo="/svgs/game-center-logo.svg"
+                        />
                     </a>
+                    
                 </div>
             </div>
         </div>
