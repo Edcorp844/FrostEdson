@@ -58,11 +58,13 @@ const GlobalHeader = () => {
                     className="flex items-center justify-between h-16"
                 >
                     {/* Logo */}
-                    <div className="flex-1 flex md:flex-none justify-start items-center">
-                        <span className="text-xl font-semibold dark:text-white font-serif flex gap-2">
-                            FROST <span className="text-[#ff375f] hidden md:block">EDSON</span>
-                        </span>
-                    </div>
+                    <Link href="/">
+                        <div className="flex-1 flex md:flex-none justify-start items-center">
+                            <span className="text-xl font-semibold dark:text-white font-serif flex gap-2">
+                                FROST <span className="text-[#ff375f] hidden md:block">EDSON</span>
+                            </span>
+                        </div>
+                    </Link>
 
                     {/* Desktop Navigation - unchanged */}
                     <nav className="hidden md:flex items-center space-x-4 xl:space-x-8 relative">
@@ -90,7 +92,7 @@ const GlobalHeader = () => {
 
                     {/* Desktop CTA - unchanged */}
                     <div className="hidden md:flex items-center space-x-4 justify-end">
-                        <div className="bg-foreground text-background font-bold px-4 py-2 rounded-3xl shadow-lg">
+                        <div className="bg-systemPink text-background font-bold px-4 py-2 rounded-3xl shadow-lg">
                             Hire Me
                         </div>
                     </div>
@@ -175,7 +177,7 @@ const GlobalHeader = () => {
                                     transition={{ delay: 0.4 }}
                                     className="mt-8 pt-6 border-t border-gray-200"
                                 >
-                                    <button className="w-full bg-[#ff375f] text-white font-bold py-4 px-6 rounded-2xl shadow-lg text-lg">
+                                    <button className="w-full bg-systemPink text-white font-bold py-4 px-6 rounded-2xl shadow-lg text-lg">
                                         Hire Me
                                     </button>
                                 </motion.div>

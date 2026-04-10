@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import GlobalHeader from "./components/global-header";
+import Footer from "./components/footer";
 
 export const metadata: Metadata = {
   title: "Frost Edson",
@@ -18,6 +19,7 @@ export default function RootLayout({
       <body>
         <GlobalHeader />
         <main className="min-h-screen font-sans ">{children}</main>
+        <Footer/>
       </body>
     </html>
   );

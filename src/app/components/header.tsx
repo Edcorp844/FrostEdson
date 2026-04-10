@@ -13,9 +13,9 @@ export default function Header() {
     return (
         <header className="sticky top-0 z-50 bg-backdrop backdrop-blur-md border-b border-separator">
             <div className="container mx-auto px-6 flex justify-between items-center h-16">
-                <Link href="/" className="text-2xl font-bold gap-2" style={{ fontFamily: 'cursive' }}>
+                <div className="text-2xl font-bold gap-2" style={{ fontFamily: 'cursive' }}>
                     <span>Portifolio</span>
-                </Link>
+                </div>
 
                 <nav className="hidden md:flex gap-8">
                     {navLinks.map((link, index) => (

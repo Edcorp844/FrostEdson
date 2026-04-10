@@ -89,7 +89,7 @@
   --color-systemGreen: var(--systemGreen);
   --color-systemRed: var(--systemRed);
   --color-systemBlue: var(--systemBlue);
-  --color-systemPink: var(--systemPink)
+  --color-systemPink: var(--systemPink);
 
   --color-label: var(--label);
   --color-labelPrimary: var(--labelPrimary);
